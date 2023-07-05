@@ -1,5 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:riders_app/services/user_db.dart';
+import 'package:riders_app/shared/widget/auth_screen.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -36,9 +40,19 @@ class HomePage extends StatelessWidget {
             ),
             ListTile(
               style: ListTileStyle.drawer,
-              onTap: () {},
-              title: Text("Home"),
-              trailing: Icon(Icons.home),
+              onTap: () async {
+                await FirebaseAuth.instance.signOut().then((value) {
+                  UserDatabase.instance.resetAllInfo().then((value) {
+                    Navigator.pushReplacement(context, MaterialPageRoute(
+                      builder: (context) {
+                        return AuthView();
+                      },
+                    ));
+                  });
+                });
+              },
+              title: Text("Logout"),
+              trailing: Icon(Icons.logout),
             ),
           ],
         ),

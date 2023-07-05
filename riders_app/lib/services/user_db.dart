@@ -76,6 +76,16 @@ class UserDatabase {
     await user_data_box.put(_key_userRegistered, userRegistered);
   }
 
+  Future<void> resetAllInfo() async {
+    await setEmail(email: '');
+    await setId(id: '');
+    await setImageUrl(imageUrl: '');
+    await setPhoneNumber(phoneNumber: '');
+    await setStatus(status: '');
+    await setUserName(userName: '');
+    await setUserRegistered(userRegistered: false);
+  }
+
   /**
    * Getters .
    */
