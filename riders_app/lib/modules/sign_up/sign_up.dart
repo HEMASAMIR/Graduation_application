@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:riders_app/modules/cubit/cubit/auth_cubit.dart';
 import 'package:riders_app/modules/home_page/home_page.dart';
+import 'package:riders_app/services/user_db.dart';
 
 import '../../shared/widget/alert_dialog.dart';
 import '../../shared/widget/custom_text_field.dart';
@@ -146,7 +147,7 @@ class SignUp extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
                 ),
-                onPressed: () {
+                onPressed: () async {
                   if (cubit.userImageFile == null) {
                     showDialog(
                       context: context,
@@ -162,6 +163,14 @@ class SignUp extends StatelessWidget {
                         confirmPassword: confirmPasswordController.text,
                         phone: phoneController.text.trim(),
                         context: context);
+                    await UserDatabase.instance
+                        .setEmail(email: emailController.text.trim());
+                    await UserDatabase.instance.setPhoneNumber(
+                        phoneNumber: phoneController.text.trim());
+                    await UserDatabase.instance.setUserName(
+                      userName: nameController.text.trim(),
+                    );
+                    
                   }
                 },
                 child: const Text(

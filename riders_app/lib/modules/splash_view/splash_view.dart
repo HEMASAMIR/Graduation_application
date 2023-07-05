@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:riders_app/modules/home_page/home_page.dart';
+import 'package:riders_app/services/user_db.dart';
 import 'package:riders_app/shared/widget/auth_screen.dart';
 
 class SplashView extends StatefulWidget {
@@ -15,11 +17,21 @@ class _SplashViewState extends State<SplashView> {
     Future.delayed(
       const Duration(seconds: 3),
       () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const AuthView(),
-            ));
+        /**
+         * if user registered , then move to home page .
+         * else , move to register page .
+         */
+        UserDatabase.instance.userRegistered
+            ? Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const HomePage(),
+                ))
+            : Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const AuthView(),
+                ));
       },
     );
   }

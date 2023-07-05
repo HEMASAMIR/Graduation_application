@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
+import 'package:riders_app/services/user_db.dart';
 
 import '../../../shared/widget/alert_dialog.dart';
 
@@ -53,6 +54,8 @@ class AuthCubit extends Cubit<AuthState> {
                 const CustomAlertDialog(message: 'Success to create user...'));
         String imgUrl = await uploadImageToFirebaseStorge();
         debugPrint('ImageUrl is : $imgUrl');
+        await UserDatabase.instance.setImageUrl(imageUrl: imgUrl);
+        UserDatabase.instance.setId(id: userCredential.user!.uid);
         await saveUserDataToFirebaseFirestore(
             name: name,
             email: email,
@@ -62,6 +65,7 @@ class AuthCubit extends Cubit<AuthState> {
             phone: phone,
             imgUrl: imgUrl);
         emit(SuccessToCreateUserState());
+        await UserDatabase.instance.setUserRegistered(userRegistered: true);
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
